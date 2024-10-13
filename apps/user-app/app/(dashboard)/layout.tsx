@@ -1,4 +1,4 @@
-import { SidebarItem } from "../../components/sidebar";
+import { SidebarItem } from "../../components/SidebarItem";
 
 export default function Layout({
   children,
@@ -14,7 +14,7 @@ export default function Layout({
                 <SidebarItem href={"/transactions"} icon={<TransactionsIcon />} title="Transactions" />
             </div>
         </div>
-            {children}
+        {children}
     </div>
   );
 }
