@@ -24,6 +24,7 @@ export const P2PTransactions = async ({
       </Card>
     );
   }
+
   return (
     <Card title="Recent Transactions">
       <div className="pt-2 flex flex-col gap-3">
