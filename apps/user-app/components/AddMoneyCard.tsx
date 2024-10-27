@@ -4,9 +4,6 @@ import { Card } from "@repo/ui/card";
 import { Select } from "@repo/ui/select";
 import { useState } from "react";
 import { TextInput } from "@repo/ui/textInput";
-import { getServerSession } from "next-auth";
-import db from "@repo/db";
-import { authOptions } from "../lib/auth";
 import { createOnRampTransaction } from "../lib/actions/onRampTransactions";
 
 const SUPPORTED_BANKS = [
@@ -38,6 +35,7 @@ export const AddMoney = () => {
               const enteredAmount = value;
               setAmount(enteredAmount);
             }}
+            value={amount}
           />
         </div>
         <div>
@@ -60,7 +58,7 @@ export const AddMoney = () => {
         <div className="flex justify-center pt-4">
           <Button
             onClick={async () => {
-              await createOnRampTransaction(Number(amount)*100, provider);
+              await createOnRampTransaction(Number(amount) * 100, provider);
               window.location.href = redirectUrl || "";
             }}
           >

@@ -17,9 +17,16 @@ declare module "next-auth" {
   interface Session {
     user: User & {
       userId: string;
+      balance: number;
+      balanceId: number;
     };
   }
 }
+
+type ExtendedUser = User & {
+  balanceId?: number;
+  balance?: number;
+};
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -36,8 +43,7 @@ export const authOptions: AuthOptions = {
       },
       async authorize(
         credentials: Credentials | undefined
-      ): Promise<User | null> {
-        console.log({ credentials });
+      ): Promise<ExtendedUser | null> {
         if (!credentials) return null;
 
         // Do zod validation, OTP validation here
@@ -71,10 +77,20 @@ export const authOptions: AuthOptions = {
             },
           });
 
+          const userBalance = await db.balance.create({
+            data: {
+              userId: Number(user?.id),
+              amount: 0,
+              locked: 0,
+            },
+          });
+
           return {
             id: user.id.toString(),
             name: user.name,
             email: user.phone,
+            balance: userBalance?.id,
+            balanceId: userBalance?.amount,
           };
         } catch (e) {
           console.error(e);
@@ -97,5 +113,5 @@ export const authOptions: AuthOptions = {
       }
       return session;
     },
-  }
+  },
 };

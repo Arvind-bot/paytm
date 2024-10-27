@@ -11,10 +11,22 @@ model User {
   id                Int                 @id @default(autoincrement())
   email             String?             @unique
   name              String?
-  phone            String              @unique
+  phone             String              @unique
   password          String
   OnRampTransaction OnRampTransaction[]
-  Balance           Balance[]
+  Balance           Balance?
+  sentTransfers     P2PTransfers[]      @relation(name: "FromUserRelation")
+  receivedTransfers P2PTransfers[]      @relation(name: "ToUserRelation")
+}
+
+model P2PTransfers {
+  id         Int      @id @default(autoincrement())
+  fromUserId Int
+  toUserId   Int
+  fromUser   User     @relation(fields: [fromUserId], references: [id], name: "FromUserRelation")
+  toUser     User     @relation(fields: [toUserId], references: [id], name: "ToUserRelation")
+  amount     Int
+  timestamp  DateTime
 }
 
 model Merchant {

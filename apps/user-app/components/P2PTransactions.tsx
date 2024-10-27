@@ -1,28 +1,20 @@
 import { Card } from "@repo/ui/card";
 
-const amountTextColors = {
-  Default: "text-gray-400",
-  Success: "text-green-600",
-  Failure: "text-red-600",
-  Processing: "text-gray-400",
+const amountTextColors: Record<string, string> = {
+  false: "text-green-600",
+  true: "text-gray-700",
 };
 
-const transactionTexts = {
-  Default: "-",
-  Success: "Amount Credited",
-  Failure: "Transaction Failed",
-  Processing: "Processing Transaction",
-};
-
-export const OnRampTransactions = ({
+export const P2PTransactions = async ({
   transactions,
 }: {
   transactions: {
     time: Date;
+    fromUserId: number;
+    toUserId: number;
+    otherPartiePhone: string | null;
     amount: number;
-    // TODO: Can the type of `status` be more specific?
-    status: "Success" | "Failure" | "Processing";
-    provider: string;
+    isSent: boolean;
   }[];
 }) => {
   if (!transactions.length) {
@@ -36,16 +28,15 @@ export const OnRampTransactions = ({
     <Card title="Recent Transactions">
       <div className="pt-2 flex flex-col gap-3">
         {transactions.map((t) => {
-          const transactionText = transactionTexts[t.status || "Default"];
+          const { isSent, otherPartiePhone } = t || {};
+          const transactionText = `${isSent ? `Sent To` : `Received from`}`;
           return (
             <div className="flex justify-between">
               <div className="flex items-center gap-1">
                 <div>
-                  <div className="font-bold text-slate-600 text-xs">
-                    {t.provider}
-                  </div>
                   <div className="text-sm">
-                    <span>{transactionText}</span>
+                    <span className="font-semibold">{transactionText}</span>{" "}
+                    {otherPartiePhone}
                   </div>
                   <div className="text-slate-600 text-xs">
                     {t.time.toDateString()}
@@ -53,9 +44,9 @@ export const OnRampTransactions = ({
                 </div>
               </div>
               <div
-                className={`font-bold text-green flex flex-col justify-center ${amountTextColors[t.status || "Default"]}`}
+                className={`font-bold text-green flex flex-col justify-center ${amountTextColors[`${isSent}`] || ""}`}
               >
-                + Rs {t.amount / 100}
+                {isSent ? "" : "+ "}Rs {t.amount / 100}
               </div>
             </div>
           );
