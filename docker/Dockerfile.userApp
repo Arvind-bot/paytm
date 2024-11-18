@@ -50,5 +50,7 @@ USER nextjs
 COPY --from=installer --chown=nextjs:nodejs /app/apps/user-app/.next/standalone ./
 COPY --from=installer --chown=nextjs:nodejs /app/apps/user-app/.next/static ./apps/user-app/.next/static
 COPY --from=installer --chown=nextjs:nodejs /app/apps/user-app/public ./apps/user-app/public
+COPY --from=builder /app/out/full/packages/db/prisma /app/packages/db/prisma
 
-CMD node apps/user-app/server.js
+# CMD node apps/user-app/server.js
+CMD ["node", "apps/user-app/server.js"]
