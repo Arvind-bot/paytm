@@ -37,7 +37,8 @@ jobs:
             migrationsChanged:
               - 'packages/db/prisma/migrations/**'
 
-      - if: steps.changes.outputs.migrationsChanged == 'true'
+      - name: Apply pending migrations if changed
+        if: steps.changes.outputs.migrationsChanged == 'true'
         run: npm run db:migrate-prod
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
