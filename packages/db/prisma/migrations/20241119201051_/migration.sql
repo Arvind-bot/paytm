@@ -5,4 +5,4 @@
 
 */
 -- AlterTable
-ALTER TABLE "Balance" ADD COLUMN     "locked" INTEGER NOT NULL;
+ALTER TABLE "Balance" ADD COLUMN "locked" INTEGER NOT NULL;
