@@ -45,4 +45,4 @@ jobs:
             sudo docker pull arvindpro/paytm_user_app:latest
             sudo docker stop paytm-app || true
             sudo docker rm paytm-app || true
-            sudo docker run -d --name paytm-app --restart unless-stopped -p 3000:3000 -e DATABASE_URL=${{ secrets.DATABASE_URL }} arvindpro/paytm_user_app:latest
+            sudo docker run -d --name paytm-app --restart unless-stopped -p 3000:3000 -e DATABASE_URL=${{ secrets.DATABASE_URL }} -e JWT_SECRET=${{ secrets.JWT_SECRET }} -e NODE_ENV=${{ secrets.NODE_ENV }} -e NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} arvindpro/paytm_user_app:latest
