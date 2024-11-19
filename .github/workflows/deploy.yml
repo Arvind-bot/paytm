@@ -30,7 +30,14 @@ jobs:
       - name: Verify Pushed Image
         run: docker pull arvindpro/paytm_user_app:latest # Replace with your Docker Hub username and repository
       
-      - name: Apply all pending migrations to the database
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            migrationsChanged:
+              - 'packages/db/prisma/migrations/**'
+
+      - if: steps.changes.outputs.migrationsChanged == 'true'
         run: npm run db:migrate-prod
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
